@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Network Security Blog</title>
+  <meta name="description" content="A simple, responsive network security blog built with HTML, CSS and JavaScript." />
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#06b6d4; --glass: rgba(255,255,255,0.04);
+      --maxw:1100px; --radius:12px;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:linear-gradient(180deg,#081028 0%, #071223 100%); color:#e6eef6; -webkit-font-smoothing:antialiased;}
+    .wrap{max-width:var(--maxw); margin:32px auto; padding:24px}
+
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700}
+    h1{font-size:1.4rem;margin:0}
+    p.lead{margin:4px 0 0;color:var(--muted);font-size:0.95rem}
+
+    nav{display:flex;gap:8px;align-items:center}
+    .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:10px;color:inherit;text-decoration:none;cursor:pointer}
+    .btn.ghost{background:transparent}
+
+    main{display:grid;grid-template-columns:1fr 340px;gap:20px}
+
+    /* posts */
+    .posts{display:flex;flex-direction:column;gap:14px}
+    article.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:18px;border-radius:var(--radius);border:1px solid rgba(255,255,255,0.03)}
+    .meta{display:flex;gap:10px;align-items:center;color:var(--muted);font-size:0.9rem}
+    .tags{display:flex;gap:6px;flex-wrap:wrap}
+    .tag{background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:8px;font-size:0.85rem}
+    pre{background:#041025;padding:12px;border-radius:8px;overflow:auto;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;font-size:0.9rem}
+    .excerpt{color:var(--muted);margin-top:8px}
+
+    /* sidebar */
+    aside{position:relative}
+    .card-aside{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:var(--radius);border:1px solid rgba(255,255,255,0.03);}
+    input[type=search]{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    .list{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+    .small{font-size:0.9rem;color:var(--muted)}
+
+    footer{margin-top:28px;color:var(--muted);font-size:0.9rem;text-align:center}
+
+    /* responsive */
+    @media (max-width:900px){main{grid-template-columns:1fr} aside{order:-1}} 
+
+    /* print (for PDF export) */
+    @media print{
+      body{background:white;color:#111}
+      header nav, .btn, .search-controls{display:none}
+      .wrap{max-width:760px;padding:0;margin:0}
+      .card-aside{display:none}
+      article.card{border:none;background:transparent}
+    }
+
+    /* small helpers */
+    .flex{display:flex;align-items:center}
+    .spacer{flex:1}
+    .mute{color:var(--muted)}
+    .post-title{font-size:1.1rem;margin:6px 0}
+    .actions{display:flex;gap:8px}
+    .pill{padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.04);background:transparent}
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">NS</div>
+        <div>
+          <h1>Network Security Blog</h1>
+          <p class="lead">Practical guides, news and tutorials about network security.</p>
+        </div>
+      </div>
+      <nav>
+        <button class="btn" id="toggleTheme">Toggle Theme</button>
+        <button class="btn" onclick="window.print()">Export as PDF</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="posts">
+
+        <article class="card" data-tags="basics,tools">
+          <div class="meta">
+            <div class="small">Jan 15, 2025</div>
+            <div class="spacer"></div>
+            <div class="tags"><span class="tag">Basics</span><span class="tag">Tools</span></div>
+          </div>
+          <h2 class="post-title">Network Security Fundamentals — OSI, Firewalls &amp; ACLs</h2>
+          <div class="excerpt">Short primer explaining the OSI model layers most relevant to security, common firewall types and how ACLs (access control lists) are used to limit traffic.</div>
+          <p class="small mute">Quick takeaway: Focus on layers 3–7 for network controls; combine network- and host-based defenses.</p>
+        </article>
+
+        <article class="card" data-tags="tools,monitoring">
+          <div class="meta">
+            <div class="small">Mar 02, 2025</div>
+            <div class="spacer"></div>
+            <div class="tags"><span class="tag">Monitoring</span><span class="tag">Tools</span></div>
+          </div>
+          <h2 class="post-title">Top Tools for Network Monitoring: Wireshark, Zeek, and Nmap</h2>
+          <div class="excerpt">How to capture traffic, analyze flows and perform careful scanning without violating policy. Example Wireshark filter included.</div>
+          <pre><code id="code1">tcp.port == 80 and ip.addr == 192.168.1.10</code></pre>
+          <div class="actions"><button class="pill" onclick="copyCode('code1')">Copy filter</button></div>
+        </article>
+
+        <article class="card" data-tags="hardening,tips">
+          <div class="meta">
+            <div class="small">Aug 18, 2025</div>
+            <div class="spacer"></div>
+            <div class="tags"><span class="tag">Hardening</span><span class="tag">Tips</span></div>
+          </div>
+          <h2 class="post-title">Secure Default Configurations — A Checklist</h2>
+          <div class="excerpt">A pragmatic checklist for network device hardening: default credentials, management plane segregation, logging and backups.</div>
+        </article>
+
+      </section>
+
+      <aside>
+        <div class="card-aside">
+          <div class="search-controls">
+            <label class="small">Search posts</label>
+            <input id="search" type="search" placeholder="Search by title, tag, or text..." />
+          </div>
+
+          <div style="height:12px"></div>
+
+          <div class="small">Popular tags</div>
+          <div class="list" id="tagList">
+            <button class="pill" data-tag="all">All</button>
+            <button class="pill" data-tag="basics">Basics</button>
+            <button class="pill" data-tag="tools">Tools</button>
+            <button class="pill" data-tag="monitoring">Monitoring</button>
+            <button class="pill" data-tag="hardening">Hardening</button>
+          </div>
+
+          <div style="height:14px"></div>
+          <div class="small">Subscribe</div>
+          <form onsubmit="event.preventDefault();alert('Thanks — this is demo-only.');">
+            <input type="email" placeholder="your@email.com" required style="width:100%;padding:8px;border-radius:8px;margin-top:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit" />
+            <div style="height:8px"></div>
+            <button class="btn" type="submit">Subscribe</button>
+          </form>
+        </div>
+      </aside>
+
+    </main>
+
+    <footer>
+      Tip: Click "Export as PDF" (or use your browser's Print → Save as PDF) to get a clean PDF of the posts.
+    </footer>
+  </div>
+
+  <script>
+    // Simple search and tag filter
+    const posts = Array.from(document.querySelectorAll('article.card'));
+    const search = document.getElementById('search');
+    const tagButtons = Array.from(document.querySelectorAll('#tagList .pill'));
+
+    function filterPosts(q, tag){
+      const qq = (q||'').toLowerCase().trim();
+      posts.forEach(p=>{
+        const text = (p.innerText||'').toLowerCase();
+        const tags = (p.dataset.tags||'').toLowerCase();
+        let ok = true;
+        if(qq){ ok = text.includes(qq); }
+        if(tag && tag!=='all'){ ok = ok && tags.split(',').includes(tag); }
+        p.style.display = ok ? 'block' : 'none';
+      });
+    }
+
+    search.addEventListener('input', e=>filterPosts(e.target.value, document.querySelector('#tagList .active')?.dataset?.tag || 'all'));
+
+    tagButtons.forEach(b=>{
+      b.addEventListener('click',()=>{
+        tagButtons.forEach(x=>x.classList.remove('active'));
+        b.classList.add('active');
+        filterPosts(search.value, b.dataset.tag);
+      });
+    });
+
+    // copy code helper
+    function copyCode(id){
+      const txt = document.getElementById(id).innerText;
+      navigator.clipboard?.writeText(txt).then(()=>{
+        alert('Copied to clipboard');
+      }, ()=>{ alert('Copy failed — select and copy manually.'); });
+    }
+
+    // theme toggle - simple inversion (demo)
+    const toggle = document.getElementById('toggleTheme');
+    toggle.addEventListener('click', ()=>{
+      if(document.documentElement.style.getPropertyValue('--bg')){
+        // quick dark/light switch by toggling a class
+        if(document.body.classList.contains('light')){
+          document.body.classList.remove('light');
+          document.documentElement.style.setProperty('--bg','#0f1724');
+        } else {
+          document.body.classList.add('light');
+          document.documentElement.style.setProperty('--bg','#ffffff');
+          document.documentElement.style.setProperty('--card','#f8fafc');
+          document.documentElement.style.setProperty('--muted','#475569');
+        }
+      }
+    });
+
+    // Initialize: select 'All'
+    document.querySelector('#tagList .pill[data-tag="all"]').classList.add('active');
+
+  </script>
+</body>
+</html>
